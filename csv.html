@@ -2,13 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Table to CSV</title>
+    <title>Table to TSV</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <style>
         table, th, tr, td {
             border: 1px solid black;
         }
-
     </style>
 </head>
 <body>
@@ -22,74 +21,120 @@
 
 <script>
     $(function() {
-        var variable = {};
+        'use strict';
 
-        $('#addRow').on('click', function() {
-            console.log("추가");
+        var mygumi = {},
+                variable = {};
 
-            var tr = document.createElement('tr');
+        mygumi.init = function() {
+            mygumi.event;
 
-            for(var i=0;i<variable.colNumber;i++) {
-                tr.appendChild(createTr(''));
+            mygumi.start();
+        }
+
+        mygumi.start = function() {
+
+            mygumi.async.readTsvFile(mygumi.dom.createInitTable);
+
+        }
+
+        mygumi.event = (function() {
+            var event = {};
+
+            event.autoEvent = {
+                addRowEvent : function() {
+                    $('#addRow').on('click', function() {
+                        console.log("추가");
+                        var tr = document.createElement('tr');
+                        for(var i=0;i<variable['colNumber'];i++) {
+                            tr.appendChild(mygumi.dom.addRow(''));
+                        }
+                        $('#table > table').append(tr);
+                        console.log("addRow");
+                    });
+                },
+                test : function() {
+                    console.log("test")
+                }
             }
 
-            $('#table > table').append(tr);
-        })
+            var autoEventFnc = (function() {
+                var autoEventObj = event.autoEvent;
 
-        $(function() {
-            $.ajax({
-                type: "GET",
-                url: "/navershopping.txt",
-                dataType: "text",
-                success: function(data) {
-                    processData(data);
-                }
-            });
-        });
-
-        function processData(str) {
-            var x = str.split('\n');
-            for (var i=0; i<x.length; i++) {
-                var y = x[i].split('\t');
-                x[i] = y;
-            }
-
-            variable.colNumber = x[0].length;
-
-            var array = x;
-            var arrayLength = array.length;
-            var theTable = document.createElement('table');
-
-            // Note, don't forget the var keyword!
-            for (var i=0;i<arrayLength;i++) {
-                if (array[i][0] == '') {
-                    break;
+                for (var property in autoEventObj) {
+                    if (autoEventObj.hasOwnProperty(property)) {
+                        autoEventObj[property].call();
+                    }
                 }
 
-                var tr = document.createElement('tr');
+            }());
 
-                $.each(array[i], function(index, value) {
-                    tr.appendChild(createTr(value));
+            return event;
+        }());
+
+        mygumi.async = (function() {
+            var async = {};
+
+            async.readTsvFile = function(callback) {
+                $.ajax({
+                    type: "GET",
+                    url: "navershopping.txt",
+                    dataType: "text",
+                    success: function(str) {
+                        var item = str.split('\n');
+
+                        for (var i=0; i<item.length; i++) {
+                            var columnValue = item[i].split('\t');
+                            item[i] = columnValue;
+                        }
+
+                        variable['colNumber'] = item[0].length;
+
+                        callback(item);
+                    }
                 });
-
-                theTable.appendChild(tr);
             }
 
-            document.getElementById('table').appendChild(theTable);
-        }
+            return async;
+        }());
 
-        function createTr(value) {
-            var td = document.createElement('td');
-            var input = document.createElement("input");
-            input.setAttribute("type", "text");
-            input.setAttribute("value", value);
+        mygumi.dom = (function() {
+            var dom = {};
 
-            td.appendChild(input);
+            dom.createInitTable = function(tsv) {
+                var array = tsv;
+                var arrayLength = array.length;
+                var theTable = document.createElement('table');
+                // Note, don't forget the var keyword!
+                for (var i=0;i<arrayLength;i++) {
+                    if (array[i][0] == '') {
+                        break;
+                    }
+                    var tr = document.createElement('tr');
+                    $.each(array[i], function(index, value) {
+                        tr.appendChild(dom.addRow(value));
+                    });
+                    theTable.appendChild(tr);
+                }
+                document.getElementById('table').appendChild(theTable);
+            }
 
-            return td;
-        }
+            dom.addRow = function(value) {
+                var td = document.createElement('td');
+                var input = document.createElement("input");
+                input.setAttribute("type", "text");
+                input.setAttribute("value", value);
+                td.appendChild(input);
+
+                return td;
+            }
+
+            return dom;
+        }());
+
+        mygumi.init();
+
     })
-
 </script>
 </body>
 </html>
