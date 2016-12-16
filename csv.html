@@ -12,8 +12,9 @@
 </head>
 <body>
 <div>
+    <a href="" id="a">click here to download your file</a>
     <button id="addRow">추가</button>
-    <button id="tsvWrite">저장</button>
+    <button id="tsvWrite" type="submit">저장</button>
     <button id="removeRow">삭제</button>
 </div>
 
@@ -59,7 +60,7 @@
 
                             tr.appendChild(mygumi.dom.addRow(uid, true));
 
-                            for(var i=0;i<variable['colNumber'];i++) {
+                            for(var i=1;i<variable['colNumber'];i++) {
 
                                 tr.appendChild(mygumi.dom.addRow(''));
 
@@ -132,7 +133,7 @@
                                 tsvArray[i][j] = cellVal;
                             }
                         }
-                        console.log(tsvArray);
+                        createTsvFile(tsvArray);
                     });
 
                 }
@@ -150,8 +151,27 @@
 
             };
 
-            // 각 행에 대한 id 값 변경할 경우를 위함.
-            function changeUid() {
+            function createTsvFile(array) {
+                var arrayLen = array.length;
+                var tsvText = "";
+
+                for(var i=0;i<arrayLen;i++) {
+
+                    var row = array[i];
+
+                    for(var index in row) {
+
+                        tsvText += row[index] + '\t';
+
+                    }
+                    tsvText += '\n';
+
+                }
+
+                var a = document.getElementById("a");
+                var tsvFile = new Blob([tsvText], {type: 'text/plain'});
+                a.href = URL.createObjectURL(tsvFile);
+                a.download = 'navershopping.txt';
 
             }
 
