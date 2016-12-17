@@ -12,7 +12,7 @@
 </head>
 <body>
 <div>
-    <a href="" id="a">click here to download your file</a>
+    <a href="" id="a"><button id="download">다운로드</button></a>
     <button id="addRow">추가</button>
     <button id="tsvWrite" type="submit">저장</button>
     <button id="removeRow">삭제</button>
@@ -25,7 +25,7 @@
         'use strict';
 
         var mygumi = {},
-                variable = {};
+            variable = {};
 
         mygumi.init = function() {
             mygumi.event.autoEventFnc();
@@ -34,12 +34,13 @@
         }
 
         mygumi.start = function() {
+            var manualExecFnc = ['downloadTsvFile', 'saveTsvFile'];
 
             mygumi.async.readTsvFile(function(res) {
 
                 mygumi.dom.createInitTable(res);
 
-                mygumi.event.manualEvent.downloadTsvFile();
+                mygumi.event.manualEventFnc(manualExecFnc);
             });
 
         }
@@ -108,34 +109,25 @@
             event.manualEvent = {
                 downloadTsvFile : function() {
 
-                    $('#tsvWrite').on('click', function() {
+                    $('#download').on('click', function() {
                         console.log("download");
-                        var tsvArray = new Array();
-                        var oTable = document.getElementById('tsv');
 
-                        //gets rows of table
-                        var rowLength = oTable.rows.length;
+                        var tsvString = tsvArrayConevert();
 
-                        //loops through rows
-                        for (var i = 0; i < rowLength; i++){
-                            tsvArray[i] = new Array();
-
-                            //gets cells of current row
-                            var oCells = oTable.rows.item(i).cells;
-
-                            //gets amount of cells of current row
-                            var cellLength = oCells.length;
-
-                            //loops through each cell in current row
-                            for(var j = 0; j < cellLength; j++){
-                                /* get your cell info here */
-                                var cellVal = oCells.item(j).getElementsByTagName("input")[0].value;
-                                tsvArray[i][j] = cellVal;
-                            }
-                        }
-                        createTsvFile(tsvArray);
+                        tsvFileConvert(tsvString);
                     });
 
+                },
+
+                saveTsvFile : function() {
+
+                    $('#tsvWrite').on('click', function() {
+                        console.log("save");
+
+                        var tsvString = tsvArrayConevert();
+
+                        mygumi.async.writeTsvFile(tsvString);
+                    });
                 }
 
             }
@@ -151,7 +143,45 @@
 
             };
 
-            function createTsvFile(array) {
+            event.manualEventFnc = function(array) {
+                var manualEventObj = event.manualEvent;
+
+                for (var i in array) {
+                    manualEventObj[array[i]].call();
+                }
+
+            };
+
+            function tsvArrayConevert() {
+                var tsvArray = new Array();
+                var oTable = document.getElementById('tsv');
+
+                //gets rows of table
+                var rowLength = oTable.rows.length;
+
+                //loops through rows
+                for (var i = 0; i < rowLength; i++) {
+                    tsvArray[i] = new Array();
+
+                    //gets cells of current row
+                    var oCells = oTable.rows.item(i).cells;
+
+                    //gets amount of cells of current row
+                    var cellLength = oCells.length;
+
+                    //loops through each cell in current row
+                    for(var j = 0; j < cellLength; j++) {
+                        /* get your cell info here */
+                        var cellVal = oCells.item(j).getElementsByTagName("input")[0].value;
+                        tsvArray[i][j] = cellVal;
+                    }
+                }
+
+                return tsvStringConvert(tsvArray);
+
+            }
+
+            function tsvStringConvert(array) {
                 var arrayLen = array.length;
                 var tsvText = "";
 
@@ -168,11 +198,15 @@
 
                 }
 
+                return tsvText;
+
+            }
+
+            function tsvFileConvert(tsvText) {
                 var a = document.getElementById("a");
                 var tsvFile = new Blob([tsvText], {type: 'text/plain'});
                 a.href = URL.createObjectURL(tsvFile);
                 a.download = 'navershopping.txt';
-
             }
 
             return event;
@@ -201,6 +235,17 @@
                             callback(item);
                         }
 
+                    }
+                });
+            }
+
+            async.writeTsvFile = function(str) {
+                $.ajax({
+                    type: "POST",
+                    url: "test.php",
+                    data: {tsv:str},
+                    success: function(data) {
+                        console.log(data);
                     }
                 });
             }
