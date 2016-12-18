@@ -188,14 +188,15 @@
                 for(var i=0;i<arrayLen;i++) {
 
                     var row = array[i];
+                    var rowText = "";
 
                     for(var index in row) {
 
-                        tsvText += row[index] + '\t';
+                        rowText += row[index] + '\t';
 
                     }
 
-                    tsvText += '\n';
+                    tsvText += rowText.trim() + '\n';
 
                 }
 
@@ -219,7 +220,7 @@
             async.readTsvFile = function(callback) {
                 $.ajax({
                     type: "GET",
-                    url: "navershopping.txt",
+                    url: "naver/navershopping.txt",
                     dataType: "text",
                     success: function(str) {
                         var item = str.split('\n');
