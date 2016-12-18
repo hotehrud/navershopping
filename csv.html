@@ -32,7 +32,17 @@
                 variable = {};
 
         mygumi.init = function() {
-            var essential = ['id', 'title', 'price_pc', 'link', 'image_link', 'category_name1', 'shipping'];
+//            var essential = ['id', 'title', 'price_pc', 'link', 'image_link', 'category_name1', 'shipping'];
+//            var essential = [{id:1}, {title:2}, {price_pc:3}, {link:6}, {image_link:8}, {category_name1:10}, {shipping:42}];
+            var essential = {id:1, title:2, price_pc:3, link:6, image_link:8, category_name1:10, shipping:42};
+            var esIndexArray = [];
+
+            for (var property in essential) {
+                esIndexArray.push(essential[property]);
+            }
+
+            variable['esIndexArray'] = esIndexArray;
+
 
             variable['essential'] = essential;
 
@@ -71,7 +81,7 @@
 
                             tr.appendChild(mygumi.dom.addRow(uid, true));
 
-                            for(var i=1;i<variable['colNumber'];i++) {
+                            for (var i=1;i<variable['colNumber'];i++) {
 
                                 tr.appendChild(mygumi.dom.addRow(''));
 
@@ -122,7 +132,7 @@
                     $('#download').on('click', function() {
                         console.log("download");
 
-                        var tsvString = tsvArrayConevert();
+                        var tsvString = tsvArrayConvert();
 
                         tsvFileConvert(tsvString);
                     });
@@ -134,9 +144,16 @@
                     $('#tsvWrite').on('click', function() {
                         console.log("save");
 
-                        var tsvString = tsvArrayConevert();
+                        var tsvString = tsvArrayConvert();
 
-                        mygumi.async.writeTsvFile(tsvString);
+                        if (typeof tsvString == 'undefined') {
+                            return false;
+                        } else {
+                            console.log('write success');
+                            // mygumi.async.writeTsvFile(tsvString);
+
+                        }
+
                     });
                 }
 
@@ -162,7 +179,7 @@
 
             };
 
-            function tsvArrayConevert() {
+            function tsvArrayConvert() {
                 var tsvArray = new Array();
                 var oTable = document.getElementById('tsv');
 
@@ -180,9 +197,10 @@
                     var cellLength = oCells.length;
 
                     //loops through each cell in current row
-                    for(var j = 0; j < cellLength; j++) {
+                    for (var j = 0; j < cellLength; j++) {
                         /* get your cell info here */
                         var cellVal = oCells.item(j).getElementsByTagName("input")[0].value;
+
                         tsvArray[i][j] = cellVal;
                     }
                 }
@@ -195,20 +213,31 @@
                 var arrayLen = array.length;
                 var tsvText = "";
 
-                for(var i=0;i<arrayLen;i++) {
+                for (var i=0;i<arrayLen;i++) {
 
                     var row = array[i];
                     var rowText = "";
 
-                    for(var index in row) {
+                    for (var index in row) {
 
                         rowText += row[index] + '\t';
 
                     }
 
-                    tsvText += rowText.trim() + '\n';
+                    var lastIndex = rowText.lastIndexOf('\t');
+                    rowText = rowText.substring(0, lastIndex);
+
+                    if (!mygumi.valid.essentialCheck(rowText, i)) {
+                        console.log('fail');
+                        return;
+                    }
+
+                    tsvText += rowText + '\n';
 
                 }
+
+                lastIndex = tsvText.lastIndexOf('\n');
+                tsvText = tsvText.substring(0, lastIndex);
 
                 return tsvText;
 
@@ -233,6 +262,7 @@
                     url: "naver/navershopping.txt",
                     dataType: "text",
                     success: function(str) {
+                        str = str.trim();
                         var item = str.split('\n');
 
                         for (var i=0; i<item.length; i++) {
@@ -269,6 +299,29 @@
             return async;
         }());
 
+        mygumi.valid = (function() {
+            var valid = {};
+
+            valid.essentialCheck = function(str, row) {
+                console.log('essentialCheck');
+                var esIndexArray = variable['esIndexArray'];
+
+                var item = str.split('\t');
+                var itemLength = item.length;
+
+                for (var i=0;i<itemLength;i++) {
+                    if (item[i] == '' && esIndexArray.indexOf(i+1) > -1) {
+                        console.log('공백 행 : ' + (row+1) + '공백 열 : ' + (i+1));
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return valid;
+        }());
+
         mygumi.dom = (function() {
             var dom = {};
 
@@ -279,10 +332,6 @@
                 theTable.setAttribute('id', 'tsv');
 
                 for (var i=0;i<arrayLength;i++) {
-
-                    if (array[i][0] == '') {
-                        break;
-                    }
 
                     var tr = document.createElement('tr');
                     tr.setAttribute('id', array[i][0]);
@@ -322,7 +371,7 @@
 
                 $.each(firstRow, function(index, value) {
 
-                    if (es.indexOf($(this).val()) > -1) {
+                    if (es.hasOwnProperty($(this).val())) {
                         $(this).addClass('essential');
                     }
 
