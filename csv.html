@@ -43,11 +43,13 @@
 
 <div>
     <div id="headButton">
+        NaverShopping EP 3.0
         <a href="" id="a"><button id="download">다운로드</button></a>
         <button id="addRow">추가</button>
         <button id="tsvWrite" type="submit">저장</button>
         <button id="removeRow">삭제</button>
     </div>
+
 </div>
 
 <div id="table"></div>
@@ -69,6 +71,7 @@
 
             variable['esIndexArray'] = esIndexArray;
             variable['essential'] = essential;
+            variable['uidArray'] = [];
 
             mygumi.event.autoEventFnc();
 
@@ -127,6 +130,9 @@
 
                         if (uid) {
                             if (uidRow.attr('id') !== undefined) {
+
+                                variable['uidArray'].splice($.inArray(uid, variable['uidArray']), 1);
+
                                 uidRow.remove();
                             } else {
                                 alert("id 컬럼의 값을 잘못 입력하셨습니다.");
@@ -371,6 +377,7 @@
 
                     $.each(array[i], function(index, value) {
 
+                        variable['uidArray'].push(value);
                         tr.appendChild(dom.addRow(value, index == 0));
                     });
 
@@ -390,6 +397,7 @@
 
                 if (value != '' && add) {
                     input.setAttribute('class', 'uid');
+                    variable['uidArray'].push(value);
                 }
 
                 td.appendChild(input);
@@ -428,4 +436,4 @@
     })
 </script>
 </body>
-</html>
+</html>gt
