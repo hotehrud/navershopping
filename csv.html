@@ -8,6 +8,10 @@
         table, th, tr, td {
             border: 1px solid black;
         }
+
+        .essential {
+            color:red;
+        }
     </style>
 </head>
 <body>
@@ -28,6 +32,10 @@
                 variable = {};
 
         mygumi.init = function() {
+            var essential = ['id', 'title', 'price_pc', 'link', 'image_link', 'category_name1', 'shipping'];
+
+            variable['essential'] = essential;
+
             mygumi.event.autoEventFnc();
 
             mygumi.start();
@@ -39,6 +47,8 @@
             mygumi.async.readTsvFile(function(res) {
 
                 mygumi.dom.createInitTable(res);
+
+                mygumi.dom.firstRowSetting();
 
                 mygumi.event.manualEventFnc(manualExecFnc);
             });
@@ -303,6 +313,21 @@
                 td.appendChild(input);
 
                 return td;
+            }
+
+            dom.firstRowSetting = function() {
+                var es = variable['essential'];
+
+                var firstRow =  $('#id td input');
+
+                $.each(firstRow, function(index, value) {
+
+                    if (es.indexOf($(this).val()) > -1) {
+                        $(this).addClass('essential');
+                    }
+
+                });
+
             }
 
             return dom;
