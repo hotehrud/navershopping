@@ -145,7 +145,7 @@
 
                 changeId : function() {
 
-                    $("#table").on('keydown, mouseout', '#tsv tr td' ,function() {
+                    $("#table").on('keydown, focusout', '#tsv tr td' ,function() {
                         var focusElement = $(this).find('.uid');
 
                         if (focusElement.attr('class') == 'uid') {
@@ -436,4 +436,4 @@
     })
 </script>
 </body>
-</html>gt
+</html>
