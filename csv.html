@@ -32,8 +32,6 @@
                 variable = {};
 
         mygumi.init = function() {
-//            var essential = ['id', 'title', 'price_pc', 'link', 'image_link', 'category_name1', 'shipping'];
-//            var essential = [{id:1}, {title:2}, {price_pc:3}, {link:6}, {image_link:8}, {category_name1:10}, {shipping:42}];
             var essential = {id:1, title:2, price_pc:3, link:6, image_link:8, category_name1:10, shipping:42};
             var esIndexArray = [];
 
@@ -312,11 +310,20 @@
                 for (var i=0;i<itemLength;i++) {
                     if (item[i] == '' && esIndexArray.indexOf(i+1) > -1) {
                         console.log('공백 행 : ' + (row+1) + '공백 열 : ' + (i+1));
+
+                        moveFocus(row, i, '#tsv tr', 'td input');
+
                         return false;
                     }
                 }
 
                 return true;
+            }
+
+            function moveFocus(row, col, rowTag, colTag) {
+                var row = $(rowTag)[row];
+
+                $(row).find(colTag)[col].focus();
             }
 
             return valid;
