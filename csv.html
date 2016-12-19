@@ -14,8 +14,13 @@
             top:100px;
         }
 
+        #table tr td input {
+            background-color: #8C8C8C;
+            color: white;
+        }
+
         .essential {
-            color:red;
+            color:red !important;
         }
 
         #headButton {
@@ -36,6 +41,8 @@
             background: #2a2a2a none repeat scroll 0 0;
             font-family: Gill Sans, sans-serif;
         }
+
+
 
     </style>
 </head>
@@ -164,7 +171,14 @@
 
                         var tsvString = tsvArrayConvert();
 
-                        tsvFileConvert(tsvString);
+                        if (typeof tsvString == 'undefined') {
+                            alert("오류 발생. 오류 지점으로 자동으로 포커스가 이동됩니다.")
+                            return false;
+                        } else {
+                            console.log('download success');
+                            tsvFileConvert(tsvString);
+                        }
+
                     });
 
                 },
@@ -177,11 +191,11 @@
                         var tsvString = tsvArrayConvert();
 
                         if (typeof tsvString == 'undefined') {
+                            alert("오류 발생. 오류 지점으로 자동으로 포커스가 이동됩니다.")
                             return false;
                         } else {
                             console.log('write success');
-                            // mygumi.async.writeTsvFile(tsvString);
-
+                            mygumi.async.writeTsvFile(tsvString);
                         }
 
                     });
@@ -289,10 +303,9 @@
             async.readTsvFile = function(callback) {
                 $.ajax({
                     type: "GET",
-                    url: "naver/navershopping.txt",
+                    url: "naver/naver.txt",
                     dataType: "text",
                     success: function(str) {
-                        str = str.trim();
                         var item = str.split('\n');
 
                         for (var i=0; i<item.length; i++) {
@@ -333,7 +346,7 @@
             var valid = {};
 
             valid.essentialCheck = function(str, row) {
-                console.log('essentialCheck');
+                // console.log('essentialCheck');
                 var esIndexArray = variable['esIndexArray'];
 
                 var item = str.split('\t');
