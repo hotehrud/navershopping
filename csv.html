@@ -37,6 +37,21 @@
             z-index: 99999;
         }
 
+        #additionTool {
+            position: fixed;
+            background: #1f1f1f;
+            top: 100px;
+            left: 50px;
+            padding: 20px;
+            color: #fff;
+            border: 1px solid #444;
+            border-left: 1px solid #444;
+            border-right: 1px solid #111;
+            border-bottom: 1px solid #111;
+            box-sizing: border-box;
+            z-index: 99999;
+        }
+
         body {
             background: #2a2a2a none repeat scroll 0 0;
             font-family: Gill Sans, sans-serif;
@@ -55,8 +70,16 @@
         <button id="addRow">추가</button>
         <button id="tsvWrite" type="submit">저장</button>
         <button id="removeRow">삭제</button>
+        <button id="additionBtn">부가기능</button>
     </div>
 
+    <div id="additionTool" style="display: none">
+        <div id="autoInsert">
+            <input type="text" value="column" id="column">
+            <input type="text" value="text" id="text">
+            <button id="autoInsertBtn">자동삽입</button>
+        </div>
+    </div>
 </div>
 
 <div id="table"></div>
@@ -160,7 +183,28 @@
                         }
 
                     })
+                },
+
+                additionTool : function() {
+
+                    $('#additionBtn').on('click', function() {
+                        var $at = $('#additionTool');
+
+                        $at.css('display') == 'none' ? $at.show() : $at.hide();
+
+                    });
+                },
+
+                additionToolAutoInsert : function() {
+
+                    $('#autoInsertBtn').on('click', function() {
+                        var column = $('#autoInsert #column').val();
+                        var text = $('#autoInsert #text').val();
+
+                        certainAutoInsert(column, text);
+                    });
                 }
+
             }
 
             event.manualEvent = {
@@ -294,6 +338,10 @@
                 a.download = 'navershopping.txt';
             }
 
+            function certainAutoInsert(col, text) {
+                console.log($('#tsv tr')[0].find(col));
+            }
+
             return event;
         }());
 
@@ -423,11 +471,13 @@
 
                 var firstRow =  $('#id td input');
 
-                $.each(firstRow, function(index, value) {
-
-                    if (es.hasOwnProperty($(this).val())) {
+                $.each(firstRow, function() {
+                    var value = $(this).val();
+                    if (es.hasOwnProperty(value)) {
                         $(this).addClass('essential');
                     }
+
+                    $(this).addClass(value);
 
                 });
 
