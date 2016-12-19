@@ -40,7 +40,7 @@
         #additionTool {
             position: fixed;
             background: #1f1f1f;
-            top: 100px;
+            top: 80px;
             left: 50px;
             padding: 20px;
             color: #fff;
@@ -339,7 +339,25 @@
             }
 
             function certainAutoInsert(col, text) {
-                console.log($('#tsv tr')[0].find(col));
+
+                var col = $('#tsv tr .' + col).attr("class");
+
+                if (typeof col == 'undefined') {
+                    console.log("!!");
+                    return false;
+                }
+
+                var array = col.split(' ');
+                var colIndex;
+
+                $.each(array,function(i,v){
+                    if (v.indexOf('^') > -1) {
+                        colIndex = array[i].slice(1);
+                    }
+                })
+
+                console.log(colIndex);
+
             }
 
             return event;
@@ -362,7 +380,7 @@
                         }
 
                         variable['colNumber'] = item[0].length;
-
+                        variable['rowNumber'] = item.length;
 
                         if (typeof(callback) == 'function') {
                             callback(item);
@@ -471,13 +489,14 @@
 
                 var firstRow =  $('#id td input');
 
-                $.each(firstRow, function() {
+                $.each(firstRow, function(i) {
                     var value = $(this).val();
                     if (es.hasOwnProperty(value)) {
                         $(this).addClass('essential');
                     }
 
                     $(this).addClass(value);
+                    $(this).addClass('^' + i);
 
                 });
 
