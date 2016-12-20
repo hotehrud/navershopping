@@ -343,7 +343,7 @@
                 var col = $('#tsv tr .' + col).attr("class");
 
                 if (typeof col == 'undefined') {
-                    console.log("!!");
+                    alert("올바르지 않은 컬럼 값입니다.");
                     return false;
                 }
 
@@ -363,7 +363,7 @@
 
                     var target = $(this).children('td')[colIndex].children;
 
-                    console.log($(target).val(text));
+                    $(target).val(text);
 
                 });
 
@@ -506,6 +506,7 @@
 
                     $(this).addClass(value);
                     $(this).addClass('^' + i);
+                    $(this).attr('readonly', 'readonly');
 
                 });
 
