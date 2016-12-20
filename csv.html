@@ -356,10 +356,8 @@
                     }
                 })
 
-                // colIndex == 열의 번호
-                console.log(colIndex);
-
                 var trArray = $('#tsv tr');
+                trArray.splice(0,1);
 
                 $.each(trArray, function(ii,vv) {
 
