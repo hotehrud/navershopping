@@ -75,8 +75,8 @@
 
     <div id="additionTool" style="display: none">
         <div id="autoInsert">
-            <input type="text" value="column" id="column">
-            <input type="text" value="text" id="text">
+            <input type="text" value="컬럼값" id="column">
+            <input type="text" value="입력값" id="text">
             <button id="autoInsertBtn">자동삽입</button>
         </div>
     </div>
@@ -129,7 +129,7 @@
                 addRowEvent : function() {
 
                     $('#addRow').on('click', function() {
-                        console.log("추가");
+//                        console.log("추가");
                         var uid = prompt('추가하실 행의 id 컬럼의 값을 입력하세요', '');
 
                         if (uid) {
@@ -145,7 +145,7 @@
                             }
 
                             $('#table > table').append(tr);
-                            console.log("addRow");
+//                            console.log("addRow");
                         }
 
                     });
@@ -154,7 +154,7 @@
                 deleteRow : function() {
 
                     $('#removeRow').on('click', function() {
-                        console.log('remove');
+//                        console.log('remove');
                         var uid = prompt('삭제하실 id 컬럼의 값을 입력하세요', '');
                         var uidRow = $('#' + uid);
 
@@ -211,7 +211,7 @@
                 downloadTsvFile : function() {
 
                     $('#download').on('click', function() {
-                        console.log("download");
+//                        console.log("download");
 
                         var tsvString = tsvArrayConvert();
 
@@ -219,7 +219,7 @@
                             alert("오류 발생. 오류 지점으로 자동으로 포커스가 이동됩니다.")
                             return false;
                         } else {
-                            console.log('download success');
+//                            console.log('download success');
                             tsvFileConvert(tsvString);
                         }
 
@@ -230,7 +230,7 @@
                 saveTsvFile : function() {
 
                     $('#tsvWrite').on('click', function() {
-                        console.log("save");
+//                        console.log("save");
 
                         var tsvString = tsvArrayConvert();
 
@@ -238,7 +238,7 @@
                             alert("오류 발생. 오류 지점으로 자동으로 포커스가 이동됩니다.")
                             return false;
                         } else {
-                            console.log('write success');
+//                            console.log('write success');
                             mygumi.async.writeTsvFile(tsvString);
                         }
 
@@ -316,7 +316,7 @@
                     rowText = rowText.substring(0, lastIndex);
 
                     if (!mygumi.valid.essentialCheck(rowText, i)) {
-                        console.log('fail');
+//                        console.log('fail');
                         return;
                     }
 
@@ -406,10 +406,10 @@
                     dataType: "text",
                     data: "dataString=" + str,
                     success: function(data) {
-                        console.log(data);
+//                        console.log(data);
                     },
                     error:function(request,status,error){
-                        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+//                        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                     }
                 });
             }
@@ -429,7 +429,7 @@
 
                 for (var i=0;i<itemLength;i++) {
                     if (item[i] == '' && esIndexArray.indexOf(i+1) > -1) {
-                        console.log('공백 행 : ' + (row+1) + '공백 열 : ' + (i+1));
+//                        console.log('공백 행 : ' + (row+1) + '공백 열 : ' + (i+1));
 
                         moveFocus(row, i, '#tsv tr', 'td input');
 
@@ -500,6 +500,7 @@
 
                 $.each(firstRow, function(i) {
                     var value = $(this).val();
+
                     if (es.hasOwnProperty(value)) {
                         $(this).addClass('essential');
                     }
@@ -514,14 +515,6 @@
 
             return dom;
         }());
-
-        function addEventListener(event, fn) {
-            if (window.addEventListener) {
-                return window.addEventListener(event, fn);
-            }
-
-            return window.attachEvent('on' + event, fn);
-        }
 
         mygumi.init();
 
