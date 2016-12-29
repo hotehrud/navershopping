@@ -57,7 +57,18 @@
             font-family: Gill Sans, sans-serif;
         }
 
+        .fixed {
+            position: fixed;
+            z-index: 99999;
+        }
 
+        .inactive {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
 
     </style>
 </head>
@@ -203,6 +214,29 @@
 
                         certainAutoInsert(column, text);
                     });
+                },
+
+                scrollAutoDisplay : function () {
+
+                    jQuery(document).bind('scroll.row', function() {
+                        var target = '#tsv';
+
+                        var mygumiTarget = jQuery(target).offset().top;
+
+                        if (jQuery(document).scrollTop() > mygumiTarget) {
+
+                            event.cssEvent.displayConvert('#firstRowArea', 'active');
+                            event.cssEvent.fixedSetting('#firstRowArea', 80);
+
+                        } else {
+
+                            event.cssEvent.displayConvert('#firstRowArea', 'inactive');
+                            $('#firstRowArea').removeClass('fixed');
+
+                        }
+
+                    });
+
                 }
 
             }
@@ -245,6 +279,34 @@
                     });
                 }
 
+            }
+
+            event.cssEvent = {
+                displayConvert : function(tag, status) {
+
+                    if ($(tag).hasClass(status)) {
+                        return;
+                    }
+
+                    var removeName = '';
+
+                    status == 'active'
+                            ? removeName = 'inactive'
+                            : removeName = 'active'
+
+                    $(tag).addClass(status);
+                    $(tag).removeClass(removeName);
+
+                },
+
+                fixedSetting : function(tag, top) {
+                    if ($(tag).hasClass('fixed')) {
+                        return;
+                    }
+
+                    $(tag).addClass('fixed');
+                    $(tag).css('top', top);
+                }
             }
 
             event.autoEventFnc = function() {
@@ -378,7 +440,7 @@
             async.readTsvFile = function(callback) {
                 $.ajax({
                     type: "GET",
-                    url: "naver/naver.txt",
+                    url: "/naver/navershopping.txt",
                     dataType: "text",
                     success: function(str) {
                         var item = str.split('\n');
@@ -402,11 +464,11 @@
             async.writeTsvFile = function(str) {
                 $.ajax({
                     type: "POST",
-                    url: "test.php",
+                    url: "/naver/upload.php",
                     dataType: "text",
                     data: "dataString=" + str,
                     success: function(data) {
-//                        console.log(data);
+                        alert(data);
                     },
                     error:function(request,status,error){
 //                        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -494,9 +556,8 @@
             }
 
             dom.firstRowSetting = function() {
-                var es = variable['essential'];
-
-                var firstRow =  $('#id td input');
+                var es = variable['essential'],
+                        firstRow =  $('#id td input');
 
                 $.each(firstRow, function(i) {
                     var value = $(this).val();
@@ -511,9 +572,26 @@
 
                 });
 
+                dom.firstRowCreate();
+
+            }
+
+            dom.firstRowCreate = function() {
+                var fixFirstRowArea = "";
+
+                fixFirstRowArea += "<div id='firstRowArea' class='inactive'>";
+                fixFirstRowArea += "    <table id='firstRowTable'>";
+                fixFirstRowArea += "    </table>";
+                fixFirstRowArea += "</div>";
+
+                $('body').prepend(fixFirstRowArea);
+
+                $('#firstRowTable').append($('#tsv tr').first().html());
+
             }
 
             return dom;
+
         }());
 
         mygumi.init();
