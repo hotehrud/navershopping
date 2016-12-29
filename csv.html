@@ -5,6 +5,10 @@
     <title>Table to TSV</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <style>
+        html body {
+            padding: 0;
+            margin: 0;
+        }
         table, th, tr, td {
             border: 1px solid black;
         }
@@ -55,6 +59,11 @@
         body {
             background: #2a2a2a none repeat scroll 0 0;
             font-family: Gill Sans, sans-serif;
+        }
+
+        #firstRowArea {
+            position: absolute;
+            z-index: 99999;
         }
 
         .fixed {
@@ -226,12 +235,15 @@
                         if (jQuery(document).scrollTop() > mygumiTarget) {
 
                             event.cssEvent.displayConvert('#firstRowArea', 'active');
-                            event.cssEvent.fixedSetting('#firstRowArea', 80);
+//                            event.cssEvent.fixedSetting('#firstRowArea', 80);
+
+                            $('#firstRowArea').css('top', jQuery(document).scrollTop() + $('#headButton').outerHeight() + 'px');
+
 
                         } else {
 
                             event.cssEvent.displayConvert('#firstRowArea', 'inactive');
-                            $('#firstRowArea').removeClass('fixed');
+//                            $('#firstRowArea').removeClass('fixed');
 
                         }
 
@@ -284,18 +296,18 @@
             event.cssEvent = {
                 displayConvert : function(tag, status) {
 
-                    if ($(tag).hasClass(status)) {
-                        return;
-                    }
+                if ($(tag).hasClass(status)) {
+                    return;
+                }
 
-                    var removeName = '';
+                var removeName = '';
 
-                    status == 'active'
-                            ? removeName = 'inactive'
-                            : removeName = 'active'
+                status == 'active'
+                        ? removeName = 'inactive'
+                        : removeName = 'active'
 
-                    $(tag).addClass(status);
-                    $(tag).removeClass(removeName);
+                $(tag).addClass(status);
+                $(tag).removeClass(removeName);
 
                 },
 
@@ -557,7 +569,7 @@
 
             dom.firstRowSetting = function() {
                 var es = variable['essential'],
-                        firstRow =  $('#id td input');
+                    firstRow =  $('#id td input');
 
                 $.each(firstRow, function(i) {
                     var value = $(this).val();
