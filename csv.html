@@ -13,12 +13,12 @@
             border: 1px solid black;
         }
 
-        #table {
+        .tsvTable {
             position: absolute;
             top:100px;
         }
 
-        #table tr td input {
+        #tsv tr td input {
             background-color: #8C8C8C;
             color: white;
         }
@@ -137,6 +137,8 @@
 
                 mygumi.dom.firstRowSetting();
 
+                mygumi.dom.titleColCreate('title');
+
                 mygumi.event.manualEventFnc(manualExecFnc);
             });
 
@@ -232,6 +234,18 @@
 
                         var mygumiTarget = jQuery(target).offset().top;
 
+                        if (jQuery(document).scrollLeft() > $('#tsv tr td').width()) {
+
+                            event.cssEvent.displayConvert('#fixTable', 'active');
+
+                            $('#fixTable').css('left', jQuery(document).scrollLeft() + 'px');
+
+                        } else {
+
+                            event.cssEvent.displayConvert('#fixTable', 'inactive');
+
+                        }
+
                         if (jQuery(document).scrollTop() > mygumiTarget) {
 
                             event.cssEvent.displayConvert('#firstRowArea', 'active');
@@ -312,12 +326,17 @@
                 },
 
                 fixedSetting : function(tag, top) {
+
                     if ($(tag).hasClass('fixed')) {
                         return;
+                    } else {
+                        $(tag).addClass('fixed');
                     }
 
-                    $(tag).addClass('fixed');
-                    $(tag).css('top', top);
+                    if (typeof top != 'undefined') {
+                        $(tag).css('top', top);
+                    }
+
                 }
             }
 
@@ -414,21 +433,7 @@
 
             function certainAutoInsert(col, text) {
 
-                var col = $('#tsv tr .' + col).attr("class");
-
-                if (typeof col == 'undefined') {
-                    alert("올바르지 않은 컬럼 값입니다.");
-                    return false;
-                }
-
-                var array = col.split(' ');
-                var colIndex;
-
-                $.each(array,function(i,v){
-                    if (v.indexOf('^') > -1) {
-                        colIndex = array[i].slice(1);
-                    }
-                })
+                var colIndex = getColIndex(col);
 
                 var trArray = $('#tsv tr');
                 trArray.splice(0,1);
@@ -531,6 +536,7 @@
                 var arrayLength = array.length;
                 var theTable = document.createElement('table');
                 theTable.setAttribute('id', 'tsv');
+                theTable.setAttribute('class', 'tsvTable');
 
                 for (var i=0;i<arrayLength;i++) {
 
@@ -602,9 +608,55 @@
 
             }
 
+            dom.titleColCreate = function(col) {
+                var fixColArea = "",
+                    fixTds = "";
+
+                fixColArea += "<table id='fixTable' class='tsvTable inactive'>";
+                fixColArea += "</table>";
+
+                $('#table').append(fixColArea);
+
+                $('.tsvTable').append();
+
+                var colIndex = getColIndex(col);
+
+                var trArray = $('#tsv tr');
+
+                $.each(trArray, function(ii,vv) {
+
+                    var target = $(this).children('td')[colIndex].children;
+                    fixTds += "<tr><td><input readonly='readonly' value='" + $(target).val() + "'></td></tr>"
+
+                });
+
+                $('#fixTable').append(fixTds);
+
+            }
+
             return dom;
 
         }());
+
+        function getColIndex (col) {
+            var col = $('#tsv tr .' + col).attr("class");
+
+            if (typeof col == 'undefined') {
+                alert("올바르지 않은 컬럼 값입니다.");
+                return false;
+            }
+
+            var array = col.split(' ');
+            var colIndex;
+
+            $.each(array,function(i,v) {
+                if (v.indexOf('^') > -1) {
+                    colIndex = array[i].slice(1);
+
+                }
+            })
+            return colIndex;
+        }
 
         mygumi.init();
 
