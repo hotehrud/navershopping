@@ -15,6 +15,7 @@
    * essential
 
      > 필수 컬럼 속성과 값을 가진 객체
+
    * esIndexArray
 
      > 필수 컬럼의 인덱스를 가진 배열
