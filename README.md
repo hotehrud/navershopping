@@ -10,20 +10,26 @@
 
 * mygumi.init
  * 필요한 요소 셋팅 및 프로세스가 시작되는 초기 단계 역할.
+
    * essential
      > 필수 컬럼 속성과 값을 가진 객체
+
    * esIndexArray
      > 필수 컬럼의 인덱스를 가진 배열
+
 * mygumi.start
  * 실제 시작 부분
+
    * manualExecFnc
      > 이벤트 관련 함수를 초기 로드가 아닌 선택적으로 원하는 지점에서 로드할 함수명을 넣을 배열
+
    * mygumi.async.readTsvFile
      > 비동기를 통해 tsv 파일을 먼저 읽어들인 후 콜백을 통해 실행될 함수 처리
 
 * mygumi.event
  * 이벤트 관련 집합체 - event = {}
    * autoEvent - 초기에 로드할 이벤트들
+
      * addRowEvent
        > 행 추가
 
@@ -52,6 +58,7 @@
        > 현재 데이터를 기준으로 tsv 업로드
 
      * cssEvent
+
        * displayConvert
          > display none or block
 
@@ -90,6 +97,7 @@
 
 * mygumi.valid
   * 유효 검증 - valid = {}
+
     * essentialCheck
        > 필수 컬럼에 대한 공백 상태 확인
 
@@ -98,6 +106,7 @@
 
 * mygumi.dom
   * dom 관련 처리 - dom = {}
+  
     * createInitTable
       > tsv 파일에 있는 전체 데이터에 관한 테이블 dom 생성
 
