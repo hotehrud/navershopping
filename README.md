@@ -61,6 +61,7 @@
      * scrollAutoDisplay
 
        > 가로 스크롤 시 title 컬럼 고정 노출
+       
        > 세로 스크롤 시 header 영역 고정 노출
 
    * manualEvent - 원하는 지점에서 로드할 이벤트들
@@ -78,11 +79,13 @@
        * displayConvert
 
          > display none or block
+         
          > class명 - inactive, active 활용
 
        * fixedSetting
 
          > position fixed 적용
+         
          > class명 - fixed 활용
 
    * autoEventFnc
