@@ -23,5 +23,5 @@
 </ol>
 
 
-[테스트 페이지](http://222.239.249.154/navershopping.html)
+[테스트 페이지](http://222.239.249.154/naver/naverTsv.html)
 
