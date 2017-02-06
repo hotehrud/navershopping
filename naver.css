@@ -1,0 +1,73 @@
+html body {
+    padding: 0;
+    margin: 0;
+}
+table, th, tr, td {
+    border: 1px solid black;
+}
+
+.tsvTable {
+    position: absolute;
+    top:100px;
+}
+
+#tsv tr td input {
+    background-color: #8C8C8C;
+    color: white;
+}
+
+.essential {
+    color:red !important;
+}
+
+#headButton {
+    position: fixed;
+    left: 50px;
+    background: #1f1f1f;
+    padding: 20px;
+    color: #fff;
+    border: 1px solid #444;
+    border-left: 1px solid #444;
+    border-right: 1px solid #111;
+    border-bottom: 1px solid #111;
+    box-sizing: border-box;
+    z-index: 99999;
+}
+
+#additionTool {
+    position: fixed;
+    background: #1f1f1f;
+    top: 80px;
+    left: 50px;
+    padding: 20px;
+    color: #fff;
+    border: 1px solid #444;
+    border-left: 1px solid #444;
+    border-right: 1px solid #111;
+    border-bottom: 1px solid #111;
+    box-sizing: border-box;
+    z-index: 99999;
+}
+
+body {
+    background: #2a2a2a none repeat scroll 0 0;
+    font-family: Gill Sans, sans-serif;
+}
+
+#firstRowArea {
+    position: absolute;
+    z-index: 99999;
+}
+
+.fixed {
+    position: fixed;
+    z-index: 99999;
+}
+
+.inactive {
+    display: none;
+}
+
+.active {
+    display: block;
+}
